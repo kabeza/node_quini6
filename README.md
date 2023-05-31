@@ -1,4 +1,4 @@
-# Sorteos del Quini6
+# Sorteos del Quini 6
 Server en NodeJS que utiliza Cheerio para obtener los datos de resultados de los sorteos del Quini 6 (Lotería de Argentina)
 
 _Aplicación desarrollada con_
@@ -7,27 +7,41 @@ _Aplicación desarrollada con_
 - Cheerio
 - Axios
 
-## Endpoints
+## Implementacion / Endpoints
 
 Una vez deployada en la url definitiva (recordar que es un server Node/Express) , los endpoints son:
 
-## Obtenidos del sitio Quini 6 Resultados ##
+## Para obtener resultados del sitio Quini 6 Resultados ##
 
-- [URL_SERVER]/opc1/sorteos
+- https://URL_DEPLOY/v1/opc1/sorteos
+
 Obtiene la lista de todos los sorteos
 De aqui se puede obtener el numero especifico de sorteo y luego llamar a este segundo endpoint para obtener los resultados de ese sorteo específico
 
-- [URL_SERVER]/opc1/resultados/:sorteoNro
+- https://URL_DEPLOY/v1/opc1/resultados/:sorteoNro
+
 Obtiene los resultados de el sorteo dado por "sorteoNro"
-Tradicional
-Segunda
-Revancha
-Siempre Sale
-Pozo Extra
+Tradicional  
+Segunda  
+Revancha  
+Siempre Sale  
+Pozo Extra  
 
-## Obtenidos del sitio Tu Jugada ##
+## Para obtener resultados del sitio Tu Jugada ##
 
-* Work in progress *
+- https://URL_DEPLOY/v1/opc2/sorteos
+
+Obtiene la lista de todos los sorteos
+De aqui se puede obtener el numero especifico de sorteo y luego llamar a este segundo endpoint para obtener los resultados de ese sorteo específico
+
+- https://URL_DEPLOY/v1/opc2/resultados/:sorteoNro  
+
+Obtiene los resultados de el sorteo dado por "sorteoNro"
+Tradicional  
+Segunda  
+Revancha  
+Siempre Sale  
+Pozo Extra  
 
 # TODO
 

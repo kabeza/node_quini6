@@ -1,5 +1,3 @@
-// https://www.tujugada.com.ar/quini6.asp
-// https://www.quini-6-resultados.com.ar/
 import * as cheerio from 'cheerio';
 
 const axios = require('axios').default;
@@ -43,36 +41,6 @@ const obtenerListaSorteos = async () => {
   }
 };
 
-const obtenerResultados = async (sorteoNro) => {
-  const listaSorteos = await obtenerListaSorteos();
-  const resBusca = searchJSON(listaSorteos, 'numero', sorteoNro);
-  const url2Get = resBusca[0].link;
-  try {
-    const response = await axios.get(url2Get);
-    const $ = cheerio.load(response.data);
-    const resp = [];
-    $('div.col-md-5 h3.verdeyblanco').each((i, el) => {
-      // eslint-disable-next-line no-console
-      console.log($(el).text());
-      console.log($(el).closest('p').text());
-      /*
-      resp[i] = {
-        sorteo: {
-          titulo: $(el).text(),
-          fecha: tit[1].trim(),
-          link: $(el).attr('href')
-        }
-      };
-      */
-    });
-    return resp;
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.log(error);
-    return false;
-  }
-};
-
 export async function quini6Sorteos(req, res) {
   try {
     // const datos = await obtenerListaSorteos();
@@ -87,6 +55,112 @@ export async function quini6Sorteos(req, res) {
     return res.status(400).json({ status: 400, message: e.message });
   }
 }
+
+const obtenerResultados = async (sorteoNro) => {
+  const listaSorteos = await obtenerListaSorteos();
+  const resBusca = searchJSON(listaSorteos, 'numero', sorteoNro);
+  const url2Get = resBusca[0].link;
+  const retorno = {
+    infoSorteo: resBusca,
+    resultados: []
+  };
+  try {
+    const response = await axios.get(url2Get);
+    const $ = cheerio.load(response.data);
+
+    // 1 SORTEO TRADICIONAL
+    retorno.resultados[0] = {
+      titulo: 'SORTEO TRADICIONAL',
+      numeros: $('h3:contains("SORTEO TRADICIONAL")').next()
+        .text().trim()
+        .replace(/-/g, ',')
+        .replace(/\s/g, ''),
+      premios: []
+    };
+    $('tr.verde:contains("SORTEO TRADICIONAL")').nextUntil('tr.verde').each((i, el) => {
+      const st = $(el).find('td').toArray();
+      retorno.resultados[0].premios.push({
+        aciertos: $(st[0]).text().trim(),
+        ganadores: $(st[1]).text().trim(),
+        premio: $(st[2]).text().trim(),
+      });
+    });
+
+    // 2 LA SEGUNDA DEL QUINI
+    retorno.resultados[1] = {
+      titulo: 'LA SEGUNDA DEL QUINI',
+      numeros: $('h3:contains("LA SEGUNDA DEL QUINI")').next()
+        .text().trim()
+        .replace(/-/g, ',')
+        .replace(/\s/g, ''),
+      premios: []
+    };
+    $('tr.verde:contains("LA SEGUNDA DEL QUINI 6")').first().nextUntil('tr.verde').each((i, el) => {
+      const sq = $(el).find('td').toArray();
+      retorno.resultados[1].premios.push({
+        aciertos: $(sq[0]).text().trim(),
+        ganadores: $(sq[1]).text().trim(),
+        premio: $(sq[2]).text().trim(),
+      });
+    });
+
+    // 3 SORTEO REVANCHA
+    retorno.resultados[2] = {
+      titulo: 'SORTEO REVANCHA',
+      numeros: $('h3:contains("SORTEO REVANCHA")').next()
+        .text().trim()
+        .replace(/-/g, ',')
+        .replace(/\s/g, ''),
+      premios: []
+    };
+    $('tr.verde:contains("LA SEGUNDA DEL QUINI 6 REVANCHA")').nextUntil('tr.verde').each((i, el) => {
+      const sqr = $(el).find('td').toArray();
+      retorno.resultados[2].premios.push({
+        aciertos: $(sqr[0]).text().trim(),
+        ganadores: $(sqr[1]).text().trim(),
+        premio: $(sqr[2]).text().trim(),
+      });
+    });
+
+    // 4 SIEMPRE SALE
+    retorno.resultados[3] = {
+      titulo: 'SIEMPRE SALE',
+      numeros: $('h3:contains("QUE SIEMPRE SALE")').next()
+        .text().trim()
+        .replace(/-/g, ',')
+        .replace(/\s/g, ''),
+      premios: []
+    };
+    $('tr.verde:contains("EL QUINI QUE SIEMPRE SALE")').nextUntil('tr.verde').each((i, el) => {
+      const qqsl = $(el).find('td').toArray();
+      retorno.resultados[3].premios.push({
+        aciertos: $(qqsl[0]).text().trim(),
+        ganadores: $(qqsl[1]).text().trim(),
+        premio: $(qqsl[2]).text().trim(),
+      });
+    });
+
+    // 5 POZO EXTRA
+    retorno.resultados[4] = {
+      titulo: 'POZO EXTRA',
+      numeros: 'Se reparte entre los que tengan seis aciertos contando los tres primeros sorteos. Los números repetidos se cuentan solo una vez.',
+      premios: []
+    };
+    $('tr.verde:contains("QUINI 6 POZO EXTRA")').nextUntil('tr.verde').each((i, el) => {
+      const qpe = $(el).find('td').toArray();
+      retorno.resultados[4].premios.push({
+        aciertos: $(qpe[0]).text().trim(),
+        ganadores: $(qpe[1]).text().trim(),
+        premio: $(qpe[2]).text().trim(),
+      });
+    });
+    return retorno;
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log(error);
+    return false;
+  }
+};
 
 export async function quini6Resultados(req, res) {
   if (req.params.sorteoNro !== undefined) {

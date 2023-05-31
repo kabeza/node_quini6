@@ -1,7 +1,7 @@
 {
   "name": "quini6",
-  "version": "0.0.0",
-  "private": true,
+  "version": "1.0.2",
+  "private": false,
   "scripts": {
     "prestart": "babel ./src --out-dir build",
     "start": "node ./build/bin/www",
