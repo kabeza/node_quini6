@@ -10,11 +10,11 @@ const app = express.Router();
 app.get('/', asyncHandler(indexPage));
 
 // https://www.quini-6-resultados.com.ar/
-app.get('/opc1/sorteos', asyncHandler(quini6Sorteos));
-app.get('/opc1/resultados/:sorteoNro', asyncHandler(quini6Resultados));
+app.get('/q6r/sorteos', asyncHandler(quini6Sorteos));
+app.get('/q6r/resultados/:sorteoNro', asyncHandler(quini6Resultados));
 
 // https://www.tujugada.com.ar/quini6.asp
-app.get('/opc2/sorteos', asyncHandler(tuJugadaSorteos));
-app.get('/opc2/resultados/:sorteoNro', asyncHandler(tuJugadaResultados));
+app.get('/tuju/sorteos', asyncHandler(tuJugadaSorteos));
+app.get('/tuju/resultados/:sorteoNro', asyncHandler(tuJugadaResultados));
 
 export default app;

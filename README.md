@@ -13,12 +13,12 @@ Una vez deployada en la url definitiva (recordar que es un server Node/Express) 
 
 ## Para obtener resultados del sitio Quini 6 Resultados ##
 
-- https://URL_DEPLOY/v1/opc1/sorteos
+- https://URL_DEPLOY/v1/q6r/sorteos
 
 Obtiene la lista de todos los sorteos
 De aqui se puede obtener el numero especifico de sorteo y luego llamar a este segundo endpoint para obtener los resultados de ese sorteo específico
 
-- https://URL_DEPLOY/v1/opc1/resultados/:sorteoNro
+- https://URL_DEPLOY/v1/q6r/resultados/:sorteoNro
 
 Obtiene los resultados de el sorteo dado por "sorteoNro"
 Tradicional  
@@ -29,12 +29,12 @@ Pozo Extra
 
 ## Para obtener resultados del sitio Tu Jugada ##
 
-- https://URL_DEPLOY/v1/opc2/sorteos
+- https://URL_DEPLOY/v1/tuju/sorteos
 
 Obtiene la lista de todos los sorteos
 De aqui se puede obtener el numero especifico de sorteo y luego llamar a este segundo endpoint para obtener los resultados de ese sorteo específico
 
-- https://URL_DEPLOY/v1/opc2/resultados/:sorteoNro  
+- https://URL_DEPLOY/v1/tuju/resultados/:sorteoNro  
 
 Obtiene los resultados de el sorteo dado por "sorteoNro"
 Tradicional  
