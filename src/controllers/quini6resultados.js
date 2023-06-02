@@ -155,11 +155,12 @@ const obtenerTodosLosNumeros = async () => {
   };
   Object.entries(listaSorteos).map(item => {
     // console.log(item[1]);
-    let x = { JSON.parse(item[1]) };
     dataFinal.cantidad += 1;
-    dataFinal.sorteos.push(item[1]);
   });
-  console.log(dataFinal);
+  dataFinal.sorteos = listaSorteos;
+  // console.log(dataFinal);
+  // const jsonObj = JSON.parse(dataFinal);
+  // console.log(jsonObj);
   return dataFinal;
   /*
   const datos = Object.entries(listaSorteos);
@@ -223,8 +224,71 @@ export async function quini6Resultados(req, res) {
 
 export async function quini6TodosLosNumeros(req, res) {
   try {
+    /*
     const datos = await obtenerTodosLosNumeros();
-    return res.status(200).json({ status: 200, message: 'Resultados del sorteo obtenidos exitosamente', data: datos });
+    return res.status(200).json({
+      status: 200,
+      message: 'Resultados del sorteo obtenidos exitosamente',
+      data: datos });
+    */
+    const listaSorteos = await obtenerListaSorteos();
+    const dataFinal = {
+      status: 200,
+      message: 'Datos obtenidos exitosamente',
+      cantidad: 0,
+      // data: listaSorteos,
+      numeros: []
+    };
+    Object.entries(listaSorteos).map(item => {
+      dataFinal.cantidad += 1;
+    });
+    const newData = JSON.parse(JSON.stringify(dataFinal));
+    Object.entries(listaSorteos).map(async item => {
+      if (parseInt(item[0], 10) <= 0) {
+        let numeroSorteo = item[1].sorteo.numero;
+        // console.log(item[1].sorteo.numero);
+        // console.log(item[1].sorteo.link);
+        const dataSorteo = await obtenerResultados(numeroSorteo);
+        const objSorteo = JSON.parse(JSON.stringify(dataSorteo));
+        let canti = 0;
+        Object.entries(dataSorteo).map(item2 => {
+          console.log(item2[0]);
+          console.log(`Cantidad: =====> ${canti++}`);
+          console.log(item2[1]);
+          console.log(`Datos -----`);
+          console.log(item2[1][0].numero);
+          // console.log(item2['infoSorteo'].numero);
+          // console.log(item2['resultados'][0].titulo);
+        });
+        /*
+        const resuSorteo = JSON.parse(JSON.stringify(await obtenerResultados(numeroSorteo)));
+        console.log(typeof resuSorteo);
+        // console.log(resuSorteo);
+        // console.log(resuSorteo);
+        Object.keys(resuSorteo).map(key => {
+          const item1 = resuSorteo[key];
+          // console.log(item1);
+        });
+        */
+        // console.log(extracted);
+        // console.log('=======');
+        // const objects = resuSorteo.keys(data).map(key => data[key]);
+        // console.log(objects);
+        /*
+        resuSorteo.resultados.each(el => {
+          console.log(el);
+        });
+        */
+        /*
+        const results = Object.entries(resuSorteo);
+        results.forEach(el => {
+          console.log(el[1]);
+        });
+        */
+      }
+    });
+
+    return res.status(200).json(dataFinal);
   } catch (e) {
     return res.status(400).json({ status: 400, message: e.message });
   }
