@@ -41,21 +41,6 @@ const obtenerListaSorteos = async () => {
   }
 };
 
-export async function quini6Sorteos(req, res) {
-  try {
-    // const datos = await obtenerListaSorteos();
-    const datos = await obtenerListaSorteos();
-    return res.status(200).json({
-      status: 200,
-      message: 'Sorteos obtenidos exitosamente',
-      cantidad: datos.length,
-      data: datos
-    });
-  } catch (e) {
-    return res.status(400).json({ status: 400, message: e.message });
-  }
-}
-
 const obtenerResultados = async (sorteoNro) => {
   const listaSorteos = await obtenerListaSorteos();
   const resBusca = searchJSON(listaSorteos, 'numero', sorteoNro);
@@ -162,6 +147,67 @@ const obtenerResultados = async (sorteoNro) => {
   }
 };
 
+const obtenerTodosLosNumeros = async () => {
+  const listaSorteos = await obtenerListaSorteos();
+  const dataFinal = {
+    cantidad: 0,
+    sorteos: []
+  };
+  Object.entries(listaSorteos).map(item => {
+    // console.log(item[1]);
+    let x = { JSON.parse(item[1]) };
+    dataFinal.cantidad += 1;
+    dataFinal.sorteos.push(item[1]);
+  });
+  console.log(dataFinal);
+  return dataFinal;
+  /*
+  const datos = Object.entries(listaSorteos);
+  let cant = 0;
+  datos.map(item => {
+    cant++;
+  });
+  const dataFinal = {
+    cantidad: cant,
+    datos: listaSorteos
+  };
+  console.log(dataFinal);
+  const jsonObj = JSON.parse(dataFinal);
+  console.log(jsonObj);
+  // console.log(listaSorteos);
+  */
+  /*
+  const datos = Object.entries(listaSorteos);
+  datos.map(item => {
+    console.log(item[0]); // key
+    console.log(item[1]); // value
+    const jsonObj = JSON.parse(item[1]);
+    console.log(jsonObj);
+  });
+  */
+};
+
+/*
+    ========================
+    Todos los Exports
+    ========================
+*/
+
+export async function quini6Sorteos(req, res) {
+  try {
+    // const datos = await obtenerListaSorteos();
+    const datos = await obtenerListaSorteos();
+    return res.status(200).json({
+      status: 200,
+      message: 'Sorteos obtenidos exitosamente',
+      cantidad: datos.length,
+      data: datos
+    });
+  } catch (e) {
+    return res.status(400).json({ status: 400, message: e.message });
+  }
+}
+
 export async function quini6Resultados(req, res) {
   if (req.params.sorteoNro !== undefined) {
     try {
@@ -172,5 +218,14 @@ export async function quini6Resultados(req, res) {
     }
   } else {
     return res.status(500).json({ status: 500, message: 'Debe enviar el parametro sorteoNro' });
+  }
+}
+
+export async function quini6TodosLosNumeros(req, res) {
+  try {
+    const datos = await obtenerTodosLosNumeros();
+    return res.status(200).json({ status: 200, message: 'Resultados del sorteo obtenidos exitosamente', data: datos });
+  } catch (e) {
+    return res.status(400).json({ status: 400, message: e.message });
   }
 }
