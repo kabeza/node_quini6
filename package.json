@@ -1,39 +1,48 @@
 {
-  "name": "quini6",
+  "name": "quini6-resultados-api-crawler",
   "version": "1.0.2",
-  "private": false,
+  "description": "Api en NodeJS/Express/Cheerio para obtener los resultados del Quini 6",
+  "main": "src/index.ts",
   "scripts": {
-    "prestart": "babel ./src --out-dir build",
-    "start": "node ./build/bin/www",
-    "startdev": "nodemon --exec babel-node ./src/bin/www",
-    "lint": "./node_modules/.bin/eslint ./src",
-    "pretty": "prettier --write '**/*.{js,json}' '!node_modules/**'",
-    "postpretty": "yarn lint --fix"
+    "start": "ts-node src/index.ts",
+    "dev": "nodemon src/index.ts",
+    "build": "tsc",
+    "lint": "eslint --fix src test"
   },
+  "keywords": [],
+  "author": "Enrique Becerra <kabeza@gmail.com> (https://beza.com.ar)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kabeza/node_quini6.git"
+  },
+  "license": "MIT",
   "dependencies": {
     "axios": "^1.4.0",
     "cheerio": "^1.0.0-rc.12",
-    "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "express-async-handler": "^1.2.0",
-    "http-errors": "~1.6.3",
-    "moment": "^2.29.4",
-    "morgan": "~1.9.1"
+    "helmet": "^6.1.5",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.21.5",
-    "@babel/core": "^7.22.1",
-    "@babel/node": "^7.22.1",
-    "@babel/plugin-transform-runtime": "^7.22.4",
-    "@babel/preset-env": "^7.22.4",
-    "@babel/register": "^7.21.0",
-    "@babel/runtime": "^7.22.3",
-    "eslint": "^8.41.0",
-    "eslint-config-airbnb-base": "^15.0.0",
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "@types/jest": "^29.5.1",
+    "@types/morgan": "^1.9.4",
+    "@types/node": "^18.16.3",
+    "@types/supertest": "^2.0.12",
+    "@typescript-eslint/eslint-plugin": "^5.59.1",
+    "@typescript-eslint/parser": "^5.59.1",
+    "eslint": "^8.39.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-import-resolver-typescript": "^3.5.5",
     "eslint-plugin-import": "^2.27.5",
+    "jest": "^29.5.0",
     "nodemon": "^2.0.22",
-    "prettier": "^2.8.8"
+    "supertest": "^6.3.3",
+    "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
   }
 }

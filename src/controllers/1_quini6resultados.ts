@@ -29,8 +29,8 @@ const obtenerListaSorteos = async () => {
           numero: tit[0].replace('Sorteo ', ''),
           titulo: tit[0],
           fecha: tit[1].replace(/-/g, '/').trim(),
-          link: $(el).attr('href')
-        }
+          link: $(el).attr('href'),
+        },
       };
     });
     return resp;

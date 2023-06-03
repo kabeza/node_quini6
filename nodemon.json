@@ -2,8 +2,7 @@
   "watch": [
     "package.json",
     "nodemon.json",
-    ".eslintrc.json",
-    ".babelrc",
+    ".eslintrc",
     ".env",
     ".prettierrc",
     "src/"
