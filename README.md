@@ -1,59 +1,50 @@
-# Express API Starter with Typescript
+# Sorteos del Quini 6
+Server en NodeJS que utiliza Cheerio para obtener los datos de resultados de los sorteos del Quini 6 (Lotería de Argentina)
 
-How to use this template:
+_Aplicación desarrollada con_
+- NodeJS
+- Express
+- Cheerio
+- Axios
 
-```sh
-npx create-express-api --typescript --directory my-api-name
-```
+## Implementacion / Endpoints
 
-Includes API Server utilities:
+Una vez deployada en la url definitiva (recordar que es un server Node/Express) , los endpoints son:
 
-* [morgan](https://www.npmjs.com/package/morgan)
-  * HTTP request logger middleware for node.js
-* [helmet](https://www.npmjs.com/package/helmet)
-  * Helmet helps you secure your Express apps by setting various HTTP headers. It's not a silver bullet, but it can help!
-* [dotenv](https://www.npmjs.com/package/dotenv)
-  * Dotenv is a zero-dependency module that loads environment variables from a `.env` file into `process.env`
-* [cors](https://www.npmjs.com/package/cors)
-  * CORS is a node.js package for providing a Connect/Express middleware that can be used to enable CORS with various options.
+## Para obtener resultados del sitio Quini 6 Resultados ##
 
-Development utilities:
+- https://URL_DEPLOY/v1/q6r/sorteos
 
-* [typescript](https://www.npmjs.com/package/typescript)
-  * TypeScript is a language for application-scale JavaScript.
-* [ts-node](https://www.npmjs.com/package/ts-node)
-  * TypeScript execution and REPL for node.js, with source map and native ESM support.
-* [nodemon](https://www.npmjs.com/package/nodemon)
-  * nodemon is a tool that helps develop node.js based applications by automatically restarting the node application when file changes in the directory are detected.
-* [eslint](https://www.npmjs.com/package/eslint)
-  * ESLint is a tool for identifying and reporting on patterns found in ECMAScript/JavaScript code.
-* [typescript-eslint](https://typescript-eslint.io/)
-  * Tooling which enables ESLint to support TypeScript.
-* [jest](https://www.npmjs.com/package/mocha)
-  * Jest is a delightful JavaScript Testing Framework with a focus on simplicity.
-* [supertest](https://www.npmjs.com/package/supertest)
-  * HTTP assertions made easy via superagent.
+Obtiene la lista de todos los sorteos
+De aqui se puede obtener el numero especifico de sorteo y luego llamar a este segundo endpoint para obtener los resultados de ese sorteo específico
 
-## Setup
+- https://URL_DEPLOY/v1/q6r/sorteo/:sorteoNro
 
-```
-npm install
-```
+Obtiene los resultados de el sorteo dado por "sorteoNro"
+Tradicional  
+Segunda  
+Revancha  
+Siempre Sale  
+Pozo Extra  
 
-## Lint
+## Para obtener resultados del sitio Tu Jugada ##
 
-```
-npm run lint
-```
+- https://URL_DEPLOY/v1/tuju/sorteos
 
-## Test
+Obtiene la lista de todos los sorteos
+De aqui se puede obtener el numero especifico de sorteo y luego llamar a este segundo endpoint para obtener los resultados de ese sorteo específico
 
-```
-npm run test
-```
+- https://URL_DEPLOY/v1/tuju/sorteo/:sorteoNro  
 
-## Development
+Obtiene los resultados de el sorteo dado por "sorteoNro"
+Tradicional  
+Segunda  
+Revancha  
+Siempre Sale  
+Pozo Extra  
 
-```
-npm run dev
-```
+# TODO
+
+- Agregar auth, seguridad
+- Optimizar código
+- etc.

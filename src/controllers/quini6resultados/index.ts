@@ -1,5 +1,6 @@
 import express from 'express';
 import * as cheerio from 'cheerio';
+import { Sorteo } from '../../interfaces/Sorteo';
 
 const axios = require('axios').default;
 const router = express.Router();
@@ -9,15 +10,6 @@ router.get('/', (req, res) => {
     message: 'Sitio: https://www.quini-6-resultados.com.ar/',
   });
 });
-
-interface Sorteo {
-  sorteo: {
-    numero: string,
-    titulo: string,
-    fecha: string,
-    link: cheerio.Element | string | undefined
-  }
-}
 
 const obtenerListaSorteos = async () : Promise<Sorteo[]> => {
   const url2Get = 'https://www.quini-6-resultados.com.ar/quini6/sorteos-anteriores.aspx';
@@ -47,6 +39,12 @@ const obtenerListaSorteos = async () : Promise<Sorteo[]> => {
 router.get('/sorteos', async (req, res) => {
   try {
     const datos = await obtenerListaSorteos();
+    // Ordena los sorteos por número de sorteo (fecha) en orden descendiente (el ultimo sorteo primero)
+    datos.sort((a, b) => {  
+      return parseInt(a.sorteo.numero) <= parseInt(b.sorteo.numero)
+        ? 1
+        : -1;
+    });
     res.status(200).json({
       message: 'Sorteos obtenidos exitosamente',
       cantidad: datos.length,
@@ -57,7 +55,7 @@ router.get('/sorteos', async (req, res) => {
   }
 });
 
-router.get('/resultados/:sorteoNro', async (req, res) => {
+router.get('/sorteo/:sorteoNro', async (req, res) => {
   // res.status(200).json({ parametro:req.params.sorteoNro });
   if (req.params.sorteoNro !== undefined) {
     try {
