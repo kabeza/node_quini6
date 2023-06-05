@@ -1,6 +1,7 @@
 import express from 'express';
 import * as cheerio from 'cheerio';
-import { Sorteo, ResultadoSorteo } from '../../interfaces/Sorteo';
+import { Sorteo } from '../../interfaces/Sorteo';
+import { ResultadoSorteo } from '../../interfaces/ResultadosSorteo';
 
 const axios = require('axios').default;
 const router = express.Router();
@@ -44,27 +45,29 @@ const searchJSON = (obj:any, key:any, val:any) => {
   return results;
 };
 
-const obtenerResultadosSorteo = async (nroSorteo: number) : Promise<ResultadoSorteo> => {
+const obtenerResultadoSorteo = async (nroSorteo: number) : Promise<ResultadoSorteo> => {
   const listaSorteos = await obtenerListaSorteos();
   const resBusca = searchJSON(listaSorteos, 'numero', nroSorteo.toString());
   const url2Get = resBusca[0].link;
   // const retorno = {} as ResultadoSorteo;
-  const retorno = {
+  const retorno:ResultadoSorteo = {
     infoSorteo: resBusca,
     resultados: [],
   };
+
   try {
     const response = await axios.get(url2Get);
     const $ = cheerio.load(response.data);
+    
     // 1 SORTEO TRADICIONAL
-    retorno.resultados[0] = {
+    retorno.resultados.push({
       titulo: 'SORTEO TRADICIONAL',
       numeros: $('h3:contains("SORTEO TRADICIONAL")').next()
         .text().trim()
         .replace(/-/g, ',')
         .replace(/\s/g, ''),
       premios: [],
-    };
+    });
     $('tr.verde:contains("SORTEO TRADICIONAL")').nextUntil('tr.verde').each((i, el) => {
       const st = $(el).find('td').toArray();
       retorno.resultados[0].premios.push({
@@ -74,6 +77,74 @@ const obtenerResultadosSorteo = async (nroSorteo: number) : Promise<ResultadoSor
       });
     });
 
+    // 2 LA SEGUNDA DEL QUINI
+    retorno.resultados.push({
+      titulo: 'LA SEGUNDA DEL QUINI',
+      numeros: $('h3:contains("LA SEGUNDA DEL QUINI")').next()
+        .text().trim()
+        .replace(/-/g, ',')
+        .replace(/\s/g, ''),
+      premios: [],
+    });
+    $('tr.verde:contains("LA SEGUNDA DEL QUINI 6")').first().nextUntil('tr.verde').each((i, el) => {
+      const sq = $(el).find('td').toArray();
+      retorno.resultados[1].premios.push({
+        aciertos: $(sq[0]).text().trim(),
+        ganadores: $(sq[1]).text().trim(),
+        premio: $(sq[2]).text().trim(),
+      });
+    });
+
+    // 3 SORTEO REVANCHA
+    retorno.resultados.push({
+      titulo: 'SORTEO REVANCHA',
+      numeros: $('h3:contains("SORTEO REVANCHA")').next()
+        .text().trim()
+        .replace(/-/g, ',')
+        .replace(/\s/g, ''),
+      premios: [],
+    });
+    $('tr.verde:contains("LA SEGUNDA DEL QUINI 6 REVANCHA")').nextUntil('tr.verde').each((i, el) => {
+      const sqr = $(el).find('td').toArray();
+      retorno.resultados[2].premios.push({
+        aciertos: $(sqr[0]).text().trim(),
+        ganadores: $(sqr[1]).text().trim(),
+        premio: $(sqr[2]).text().trim(),
+      });
+    });
+
+    // 4 SIEMPRE SALE
+    retorno.resultados.push({
+      titulo: 'SIEMPRE SALE',
+      numeros: $('h3:contains("QUE SIEMPRE SALE")').next()
+        .text().trim()
+        .replace(/-/g, ',')
+        .replace(/\s/g, ''),
+      premios: [],
+    });
+    $('tr.verde:contains("EL QUINI QUE SIEMPRE SALE")').nextUntil('tr.verde').each((i, el) => {
+      const qqsl = $(el).find('td').toArray();
+      retorno.resultados[3].premios.push({
+        aciertos: $(qqsl[0]).text().trim(),
+        ganadores: $(qqsl[1]).text().trim(),
+        premio: $(qqsl[2]).text().trim(),
+      });
+    });
+
+    // 5 POZO EXTRA
+    retorno.resultados.push({
+      titulo: 'POZO EXTRA',
+      numeros: 'Se reparte entre los que tengan seis aciertos contando los tres primeros sorteos. Los números repetidos se cuentan solo una vez.',
+      premios: [],
+    });
+    $('tr.verde:contains("QUINI 6 POZO EXTRA")').nextUntil('tr.verde').each((i, el) => {
+      const qpe = $(el).find('td').toArray();
+      retorno.resultados[4].premios.push({
+        aciertos: $(qpe[0]).text().trim(),
+        ganadores: $(qpe[1]).text().trim(),
+        premio: $(qpe[2]).text().trim(),
+      });
+    });
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log(error);
@@ -109,7 +180,7 @@ router.get('/sorteos', async (req, res) => {
 router.get('/sorteo/:sorteoNro', async (req, res) => {
   if (req.params.sorteoNro !== undefined) {
     try {
-      const datos = await obtenerResultadosSorteo(parseInt(req.params.sorteoNro));
+      const datos = await obtenerResultadoSorteo(parseInt(req.params.sorteoNro));
       return res.status(200).json({ message: 'Resultados del sorteo obtenidos exitosamente', data: datos });
     } catch (error) {
       return res.status(400).json({ message: error });

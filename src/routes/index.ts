@@ -1,5 +1,6 @@
 import express from 'express';
 import quini6resultados from '../controllers/quini6resultados';
+import tujugada from '../controllers/tujugada';
 // import { quini6Sorteos, quini6Resultados, quini6TodosLosNumeros } from '../controllers/quini6resultados';
 
 const app = express.Router();
@@ -20,13 +21,7 @@ app.get('/ping', (req, res) => {
 // https://www.quini-6-resultados.com.ar/
 app.use('/q6r', quini6resultados);
 
-// https://www.quini-6-resultados.com.ar/
-// app.get('/q6r/sorteos', asyncHandler(quini6Sorteos));
-// app.get('/q6r/resultados/:sorteoNro', asyncHandler(quini6Resultados));
-// app.get('/q6r/todoslosnumeros', asyncHandler(quini6TodosLosNumeros));
-
 // https://www.tujugada.com.ar/quini6.asp
-// app.get('/tuju/sorteos', asyncHandler(tuJugadaSorteos));
-// app.get('/tuju/resultados/:sorteoNro', asyncHandler(tuJugadaResultados));
+app.use('/tuju', tujugada);
 
 export default app;
