@@ -1,15 +1,9 @@
 import express from 'express';
 import * as cheerio from 'cheerio';
-import { Sorteo } from '../../interfaces/Sorteo';
+import { Sorteo, ResultadoSorteo } from '../../interfaces/Sorteo';
 
 const axios = require('axios').default;
 const router = express.Router();
-
-router.get('/', (req, res) => {
-  res.json({
-    message: 'Sitio: https://www.quini-6-resultados.com.ar/',
-  });
-});
 
 const obtenerListaSorteos = async () : Promise<Sorteo[]> => {
   const url2Get = 'https://www.quini-6-resultados.com.ar/quini6/sorteos-anteriores.aspx';
@@ -36,6 +30,34 @@ const obtenerListaSorteos = async () : Promise<Sorteo[]> => {
   }
 };
 
+const searchJSON = (obj:any, key:any, val:any) => {
+  let results :any = [];
+  for (let k in obj) {
+    if (obj.hasOwnProperty(k)) {
+      if (k === key && obj[k] === val) {
+        results.push(obj);
+      } else if (typeof obj[k] === 'object') {
+        results = results.concat(searchJSON(obj[k], key, val));
+      }
+    }
+  }
+  return results;
+};
+
+const obtenerResultadosSorteo = async (nroSorteo: number) : Promise<ResultadoSorteo> => {
+  const listaSorteos = await obtenerListaSorteos();
+  const resBusca = searchJSON(listaSorteos, 'numero', nroSorteo.toString());
+  const url2Get = resBusca[0].link;
+  const retorno: ResultadoSorteo = [];
+  return retorno;
+};
+
+router.get('/', (req, res) => {
+  res.json({
+    message: 'Sitio: https://www.quini-6-resultados.com.ar/',
+  });
+});
+
 router.get('/sorteos', async (req, res) => {
   try {
     const datos = await obtenerListaSorteos();
@@ -56,10 +78,9 @@ router.get('/sorteos', async (req, res) => {
 });
 
 router.get('/sorteo/:sorteoNro', async (req, res) => {
-  // res.status(200).json({ parametro:req.params.sorteoNro });
   if (req.params.sorteoNro !== undefined) {
     try {
-      const datos = (req.params.sorteoNro);
+      const datos = await obtenerResultadosSorteo(parseInt(req.params.sorteoNro));
       return res.status(200).json({ message: 'Resultados del sorteo obtenidos exitosamente', data: datos });
     } catch (error) {
       return res.status(400).json({ message: error });
