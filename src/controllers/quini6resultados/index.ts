@@ -48,7 +48,36 @@ const obtenerResultadosSorteo = async (nroSorteo: number) : Promise<ResultadoSor
   const listaSorteos = await obtenerListaSorteos();
   const resBusca = searchJSON(listaSorteos, 'numero', nroSorteo.toString());
   const url2Get = resBusca[0].link;
-  const retorno: ResultadoSorteo = [];
+  // const retorno = {} as ResultadoSorteo;
+  const retorno = {
+    infoSorteo: resBusca,
+    resultados: [],
+  };
+  try {
+    const response = await axios.get(url2Get);
+    const $ = cheerio.load(response.data);
+    // 1 SORTEO TRADICIONAL
+    retorno.resultados[0] = {
+      titulo: 'SORTEO TRADICIONAL',
+      numeros: $('h3:contains("SORTEO TRADICIONAL")').next()
+        .text().trim()
+        .replace(/-/g, ',')
+        .replace(/\s/g, ''),
+      premios: [],
+    };
+    $('tr.verde:contains("SORTEO TRADICIONAL")').nextUntil('tr.verde').each((i, el) => {
+      const st = $(el).find('td').toArray();
+      retorno.resultados[0].premios.push({
+        aciertos: $(st[0]).text().trim(),
+        ganadores: $(st[1]).text().trim(),
+        premio: $(st[2]).text().trim(),
+      });
+    });
+
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log(error);
+  }
   return retorno;
 };
 
