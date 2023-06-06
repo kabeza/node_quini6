@@ -52,18 +52,13 @@ const obtenerListaSorteos = async () : Promise<Sorteo[]> => {
 
 const obtenerResultadoSorteo = async (nroSorteo: number) : Promise<ResultadoSorteo> => {
   const listaSorteos = await obtenerListaSorteos();
-  const resBusca = searchJSON(listaSorteos, 'numero', nroSorteo);
+  const resBusca = searchJSON(listaSorteos, 'numero', nroSorteo.toString());
   const url2Get = resBusca[0].link;
 
   const retorno:ResultadoSorteo = {
     infoSorteo: resBusca,
     resultados: [],
   };
-
-  console.log(listaSorteos);
-  console.log(resBusca);
-  console.log(url2Get);
-  console.log(retorno);
 
   try {
     const response = await axios.get(url2Get);
@@ -100,9 +95,6 @@ const obtenerResultadoSorteo = async (nroSorteo: number) : Promise<ResultadoSort
         });
       });
 
-    console.log('Retorno: ');
-    console.log(retorno);
-    /*
     // 2 SEGUNDA VUELTA
     numeros.splice(0, numeros.length);
     $('table.tit:contains("SEGUNDA VUELTA")').first()
@@ -115,7 +107,7 @@ const obtenerResultadoSorteo = async (nroSorteo: number) : Promise<ResultadoSort
     retorno.resultados[1] = {
       titulo: 'SEGUNDA VUELTA',
       numeros: numeros.toString(),
-      premios: []
+      premios: [],
     };
     $('table.tit:contains("PREMIOS 2DA VUELTA")').first().next('table')
       .find('tr')
@@ -143,7 +135,7 @@ const obtenerResultadoSorteo = async (nroSorteo: number) : Promise<ResultadoSort
     retorno.resultados[2] = {
       titulo: 'REVANCHA',
       numeros: numeros.toString(),
-      premios: []
+      premios: [],
     };
     $('table.tit:contains("PREMIOS REVANCHA")').first().next('table')
       .find('tr')
@@ -171,7 +163,7 @@ const obtenerResultadoSorteo = async (nroSorteo: number) : Promise<ResultadoSort
     retorno.resultados[3] = {
       titulo: 'SIEMPRE SALE',
       numeros: numeros.toString(),
-      premios: []
+      premios: [],
     };
     $('table.tit:contains("PREMIOS SIEMPRE SALE")').first().next('table')
       .find('tr')
@@ -196,7 +188,7 @@ const obtenerResultadoSorteo = async (nroSorteo: number) : Promise<ResultadoSort
       .each((i, el) => {
         numeros.push((`0000${$(el).text().trim()}`).slice(-2));
       });
-      $('table.tit:contains("POZO EXTRA")').first()
+    $('table.tit:contains("POZO EXTRA")').first()
       .next().next()
       .next()
       .find('table')
@@ -216,7 +208,7 @@ const obtenerResultadoSorteo = async (nroSorteo: number) : Promise<ResultadoSort
     retorno.resultados[4] = {
       titulo: 'POZO EXTRA',
       numeros: numeros.toString(),
-      premios: []
+      premios: [],
     };
     $('table.tit:contains("PREMIOS POZO EXTRA")').first().next('table')
       .find('tr')
@@ -231,7 +223,6 @@ const obtenerResultadoSorteo = async (nroSorteo: number) : Promise<ResultadoSort
           premio: $(st[1]).text().trim(),
         });
       });
-    */      
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log(error);
