@@ -2,7 +2,7 @@ import express from 'express';
 import * as cheerio from 'cheerio';
 import { Sorteo } from '../../interfaces/Sorteo';
 import { ResultadoSorteo } from '../../interfaces/ResultadosSorteo';
-import { Tiposorteo, TodosLosNumeros } from '../../interfaces/TodosLosNumeros';
+import { Numero, TodosLosNumeros } from '../../interfaces/TodosLosNumeros';
 
 const axios = require('axios').default;
 const router = express.Router();
@@ -158,181 +158,14 @@ const obtenerResultadoSorteo = async (nroSorteo: number) : Promise<ResultadoSort
   });
 };
 
-const obtenerTodosLosNumeros = async () : Promise<TodosLosNumeros> => {
-  const datosFinales:TodosLosNumeros = {
-    tiposorteo: [],
-  };
+const obtenerTodosLosSorteos = async () : Promise<ResultadoSorteo[]> => {
   const listaSorteos = await obtenerListaSorteos();
   listaSorteos.sort((a, b) => {  
     return parseInt(a.sorteo.numero) <= parseInt(b.sorteo.numero) ? 1 : -1;
   });
-  
-  let xx: any[] = [];
-
-  Object.entries(listaSorteos).map(async item => {
-    const respuesta = await obtenerResultadoSorteo(parseInt(item[1].sorteo.numero));
-    xx.push(respuesta);
-  });
-  console.log('Respuesta: ' + JSON.stringify(xx));
-  
-  return datosFinales;
-};
-
-
-const obtenerTodosLosNumeros1 = async () : Promise<TodosLosNumeros> => {
-  const datosFinales:TodosLosNumeros = {
-    tiposorteo: [],
-  };
-
-  // let datosCompleto: ResultadoSorteo[] = [];
-  
-  try {
-    const listaSorteos = await obtenerListaSorteos();
-    listaSorteos.sort((a, b) => {  
-      return parseInt(a.sorteo.numero) <= parseInt(b.sorteo.numero) ? 1 : -1;
-    });
-
-    datosFinales.tiposorteo.push({
-      titulo: 'SORTEO TRADICIONAL',
-      numeros: [],
-    });
-    datosFinales.tiposorteo.push({
-      titulo: 'LA SEGUNDA DEL QUINI',
-      numeros: [],
-    });
-    datosFinales.tiposorteo.push({
-      titulo: 'SORTEO REVANCHA',
-      numeros: [],
-    });
-    datosFinales.tiposorteo.push({
-      titulo: 'SIEMPRE SALE',
-      numeros: [],
-    });
-
-    Object.entries(listaSorteos).map(async item => {      
-      // Solo para que haga el loop 2 veces
-      if (parseInt(item[0], 10) <= 1) {
-        // // let numeroSorteo = item[1].sorteo.numero;
-        // // const dataSorteo = await obtenerResultadoSorteo(parseInt(numeroSorteo));
-        // // console.log(dataSorteo);
-        // datosCompleto.push(dataSorteo);
-        // console.log(item[1]);
-        /*
-        Object.entries(dataSorteo.resultados).map(item1 => {
-          datosFinales.tiposorteo.forEach(function (val1:Tiposorteo) {
-            // console.log(val1);
-            if (item1[1].titulo == val1.titulo) {
-              // console.log('-------SI------');
-              val1.numeros.push({
-                numero: item[1].sorteo.numero,
-                fecha: item[1].sorteo.fecha,
-                numeros: item1[1].numeros,
-              });
-            }
-          });
-        });        
-        */
-        /*
-        Object.entries(await dataSorteo.resultados).map(item1 => {
-          // tmpData.numeros.push(item1[1].numeros);
-          // console.log(item1);          
-          if (item1[1].titulo == 'POZO EXTRA') { 
-            return false; 
-          } else {
-            Object.entries(datosFinales.tiposorteo).map(item2 => {
-              if (item2[1].titulo == item1[1].titulo) {
-                console.log('----------SI---------');
-                
-              }
-              switch (item1[1].titulo) { 
-                case '': { 
-                  //statements; 
-                  break; 
-                } 
-                case '': { 
-                  //statements; 
-                  break; 
-                } 
-                case '': { 
-                  //statements; 
-                  break; 
-                } 
-                default: { 
-                  //statements; 
-                  break; 
-                }
-              } 
-              // console.log('------------');
-              // console.log(item2[1]);
-            });
-          }
-          // console.log(item1[1].titulo);
-        });
-        */
-        // console.log(item[1].sorteo.numero);
-        // console.log(item[1].sorteo.link);
-        // console.log(item[1].sorteo.fecha);
-        // console.log(item[1].sorteo.titulo);
-        // console.log(item1[1]);
-        // objSorteo = JSON.parse(JSON.stringify(dataSorteo));
-      }
-    });
-    // console.log('Datos Finales: ' + JSON.stringify(datosFinales));
-
-    // console.log(dataSorteo);
-    // console.log(objSorteo);
-    // const newData = JSON.parse(JSON.stringify(dataFinal));
-    Object.entries(listaSorteos).map(async item => {
-      if (parseInt(item[0], 10) <= 0) {
-        // let numeroSorteo = item[1].sorteo.numero;
-        // console.log(item[1].sorteo.numero);
-        // console.log(item[1].sorteo.link);
-        /*
-        const dataSorteo = await obtenerResultadoSorteo(parseInt(numeroSorteo));
-        const objSorteo = JSON.parse(JSON.stringify(dataSorteo));
-        let canti = 0;
-        Object.entries(dataSorteo).map(item2 => {
-          console.log(item2[0]);
-          console.log(`Cantidad: =====> ${canti++}`);
-          console.log(item2[1]);
-          console.log('Datos -----');
-          console.log(item2[1][0].numero);
-          // console.log(item2['infoSorteo'].numero);
-          // console.log(item2['resultados'][0].titulo);
-        });
-        */
-        /*
-        const resuSorteo = JSON.parse(JSON.stringify(await obtenerResultados(numeroSorteo)));
-        console.log(typeof resuSorteo);
-        // console.log(resuSorteo);
-        // console.log(resuSorteo);
-        Object.keys(resuSorteo).map(key => {
-          const item1 = resuSorteo[key];
-          // console.log(item1);
-        });
-        */
-        // console.log(extracted);
-        // console.log('=======');
-        // const objects = resuSorteo.keys(data).map(key => data[key]);
-        // console.log(objects);
-        /*
-        resuSorteo.resultados.each(el => {
-          console.log(el);
-        });
-        */
-        /*
-        const results = Object.entries(resuSorteo);
-        results.forEach(el => {
-          console.log(el[1]);
-        });
-        */
-      }
-    });
-  } catch (error) {
-    console.log(error);
-  }
-  // console.log(datosCompleto);
-  return datosFinales;
+  return Promise.all(listaSorteos.map((item) => {
+    return obtenerResultadoSorteo(parseInt(item.sorteo.numero));
+  }));
 };
 
 router.get('/', (req, res) => {
@@ -375,11 +208,95 @@ router.get('/sorteo/:sorteoNro', async (req, res) => {
 
 router.get('/todoslosnumeros', async (req, res) => {
   try {
-    const datos = await obtenerTodosLosNumeros();
+    const datos = await obtenerTodosLosSorteos();
+
+    let datosFinales:TodosLosNumeros = {
+      tiposorteo: [],
+    };
+    
+    let numerosTradicional : Numero[] = [];
+    let numerosSegunda : Numero[] = [];
+    let numerosRevancha : Numero[] = [];
+    let numerosSiempreSale : Numero[] = [];
+    let numArre:any[] = []; // Para almacenar de cuajo todos los numeros
+    for (let dd = 0; dd < datos.length; dd++) {
+      let dataSorteo = datos[dd];
+      for (let ds = 0; ds < dataSorteo.resultados.length; ds++) {
+        if (dataSorteo.resultados[ds].titulo == 'POZO EXTRA') {
+        } else {
+          switch (dataSorteo.resultados[ds].titulo) { 
+            case 'SORTEO TRADICIONAL': { 
+              numerosTradicional.push({
+                fecha: datos[dd].infoSorteo[0].fecha,
+                numero: datos[dd].infoSorteo[0].numero,
+                numeros: dataSorteo.resultados[ds].numeros,
+              });
+              break; 
+            } 
+            case 'LA SEGUNDA DEL QUINI': { 
+              numerosSegunda.push({
+                fecha: datos[dd].infoSorteo[0].fecha,
+                numero: datos[dd].infoSorteo[0].numero,
+                numeros: dataSorteo.resultados[ds].numeros,
+              });
+              break; 
+            } 
+            case 'SORTEO REVANCHA': { 
+              numerosRevancha.push({
+                fecha: datos[dd].infoSorteo[0].fecha,
+                numero: datos[dd].infoSorteo[0].numero,
+                numeros: dataSorteo.resultados[ds].numeros,
+              });
+              break; 
+            } 
+            case 'SIEMPRE SALE': { 
+              numerosSiempreSale.push({
+                fecha: datos[dd].infoSorteo[0].fecha,
+                numero: datos[dd].infoSorteo[0].numero,
+                numeros: dataSorteo.resultados[ds].numeros,
+              });
+              break; 
+            } 
+            default: { 
+              //statements; 
+              break; 
+            }
+          }
+          numArre.push(dataSorteo.resultados[ds].numeros);
+        }
+      }
+    }
+
+    // 1 SORTEO TRADICIONAL
+    datosFinales.tiposorteo.push({
+      titulo: 'SORTEO TRADICIONAL',
+      numeros: numerosTradicional,
+    });
+
+    // 2 SORTEO LA SEGUNDA
+    datosFinales.tiposorteo.push({
+      titulo: 'LA SEGUNDA DEL QUINI',
+      numeros: numerosSegunda,
+    });
+
+    // 3 SORTEO REVANCHA
+    datosFinales.tiposorteo.push({
+      titulo: 'SORTEO REVANCHA',
+      numeros: numerosRevancha,
+    });
+    
+    // 4 SIEMPRE SALE
+    datosFinales.tiposorteo.push({
+      titulo: 'SIEMPRE SALE',
+      numeros: numerosSiempreSale,
+    });
+
     res.status(200).json({
       message: 'Todos los números históricos obtenidos exitosamente',
-      data: datos,
+      data: datosFinales,
+      todosLosNumerosEver: numArre,
     });
+
   } catch (error) {
     return res.status(400).json({ message: error });
   }  
