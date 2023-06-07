@@ -27,6 +27,16 @@ Revancha
 Siempre Sale  
 Pozo Extra  
 
+- https://URL_DEPLOY/v1/q6r/todoslosnumeros
+
+Obtiene data de los ultimos 18-20 sorteos  
+Agrupa los numeros por tipo de sorteo:
+Tradicional  
+Segunda  
+Revancha  
+Siempre Sale  
+Y además saca en "raw" una propiedad con todos los números juntos, para sacar estadísticas o similar
+
 ## Para obtener resultados del sitio Tu Jugada ##
 
 - https://URL_DEPLOY/v1/tuju/sorteos
