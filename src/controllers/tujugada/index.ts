@@ -32,14 +32,12 @@ const obtenerListaSorteos = async () : Promise<Sorteo[]> => {
     const resp: Sorteo[] = [];
     $('div.ante').each((i, el) => {
       resp[i] = {
-        sorteo: {
-          numero: $(el).text().trim().substring(15, 19),
-          titulo: insert($(el).text().trim(), 19, ' '),
-          fecha: $(el).text().trim()
-            .slice($(el).text().trim().indexOf(':') + 1)
-            .trim(),
-          link: `https://www.tujugada.com.ar/quini6.asp?sorteo=${$(el).text().trim().substring(15, 19)}`,
-        },
+        numero: $(el).text().trim().substring(15, 19),
+        titulo: insert($(el).text().trim(), 19, ' '),
+        fecha: $(el).text().trim()
+          .slice($(el).text().trim().indexOf(':') + 1)
+          .trim(),
+        link: `https://www.tujugada.com.ar/quini6.asp?sorteo=${$(el).text().trim().substring(15, 19)}`,
       };
     });
     return resp;
@@ -241,7 +239,7 @@ router.get('/sorteos', async (req, res) => {
     const datos = await obtenerListaSorteos();
     // Ordena los sorteos por número de sorteo (fecha) en orden descendiente (el ultimo sorteo primero)
     datos.sort((a, b) => {  
-      return parseInt(a.sorteo.numero) <= parseInt(b.sorteo.numero)
+      return parseInt(a.numero) <= parseInt(b.numero)
         ? 1
         : -1;
     });

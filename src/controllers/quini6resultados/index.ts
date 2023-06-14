@@ -16,12 +16,10 @@ const obtenerListaSorteos = async () : Promise<Sorteo[]> => {
     $('div.col-md-3 p a').each((i, el) => {
       const tit = $(el).text().split('del ');
       resp[i] = {
-        sorteo: {
-          numero: tit[0].replace('Sorteo ', ''),
-          titulo: tit[0],
-          fecha: tit[1].replace(/-/g, '/').trim(),
-          link: $(el).attr('href'),
-        },
+        numero: tit[0].replace('Sorteo ', ''),
+        titulo: tit[0],
+        fecha: tit[1].replace(/-/g, '/').trim(),
+        link: $(el).attr('href'),
       };
     });
     return resp;
@@ -161,10 +159,10 @@ const obtenerResultadoSorteo = async (nroSorteo: number) : Promise<ResultadoSort
 const obtenerTodosLosSorteos = async () : Promise<ResultadoSorteo[]> => {
   const listaSorteos = await obtenerListaSorteos();
   listaSorteos.sort((a, b) => {  
-    return parseInt(a.sorteo.numero) <= parseInt(b.sorteo.numero) ? 1 : -1;
+    return parseInt(a.numero) <= parseInt(b.numero) ? 1 : -1;
   });
   return Promise.all(listaSorteos.map((item) => {
-    return obtenerResultadoSorteo(parseInt(item.sorteo.numero));
+    return obtenerResultadoSorteo(parseInt(item.numero));
   }));
 };
 
@@ -179,7 +177,7 @@ router.get('/sorteos', async (req, res) => {
     const datos = await obtenerListaSorteos();
     // Ordena los sorteos por número de sorteo (fecha) en orden descendiente (el ultimo sorteo primero)
     datos.sort((a, b) => {  
-      return parseInt(a.sorteo.numero) <= parseInt(b.sorteo.numero)
+      return parseInt(a.numero) <= parseInt(b.numero)
         ? 1
         : -1;
     });
